@@ -51,7 +51,7 @@ impl Minimax {
             if maximising_player {
                 best_value = cmp::max(child_score, best_value);
                 alpha = cmp::max(best_value, alpha);
-                if beta <= alpha {
+                if best_value > beta {
                     break;
                 }
             } else {
