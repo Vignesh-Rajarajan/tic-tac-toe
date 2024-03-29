@@ -50,8 +50,8 @@ impl TicTacToe {
     pub fn flip_player(&mut self) {
         self.current_player = self.get_other_player();
     }
-    pub fn get_board(&self) -> [PlayerPiece; 9] {
-        self.board
+    pub fn get_board(&self) -> &[PlayerPiece; 9] {
+        &self.board
     }
 
     fn print_row(&self, range: std::ops::Range<usize>) {
@@ -70,7 +70,7 @@ impl TicTacToe {
     }
 
     pub fn play_at(&mut self, index: usize) -> Result<(), &'static str> {
-        if index >= 9 || index < 0 {
+        if index >= 9 {
             return Err("Index out of bounds");
         }
         if self.board[index] != PlayerPiece::Empty {
@@ -93,5 +93,23 @@ impl TicTacToe {
                 && self.board[line[1]] == other_piece
                 && self.board[line[2]] == other_piece
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_playing() {
+        let mut game = TicTacToe::new();
+        assert_eq!(game.get_current_player(), Player::X);
+        assert!(game.play_at(0).is_ok());
+
+        assert_eq!(game.get_current_player(), Player::O);
+        assert!(game.play_at(1).is_ok());
+
+        assert_eq!(game.get_current_player(), Player::X);
+        assert!(game.play_at(0).is_err());
     }
 }
